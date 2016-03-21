@@ -208,7 +208,10 @@ module Portus
       return nil if record.size != 1
       record = record.first
 
-      cfg["attr"].empty? ? guess_from_dn(record["dn"]) : guess_from_attr(record, cfg["attr"])
+      email ||= "#{username}@#{cfg["suffix"]}" unless cfg["suffix"].empty? rescue nil
+      email ||= guess_from_attr(record, cfg["attr"]) unless cfg["attr"].empty? rescue nil
+      email ||= guess_from_dn(record["dn"])
+      return email
     end
 
     # Guess the email from the given attribute. Note that if multiple records
@@ -228,7 +231,7 @@ module Portus
       dc = []
       dn.first.split(",").each do |value|
         kv = value.split("=")
-        dc << kv.last if kv.first == "dc"
+        dc << kv.last if kv.first.downcase == "dc"
       end
       return nil if dc.empty?
 
