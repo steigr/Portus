@@ -67,9 +67,8 @@ class User < ActiveRecord::Base
   def self.find_from_event(event)
     if Portus::LDAP.enabled?
       actor = User.find_by(ldap_name: event["actor"]["name"])
-    else
-      actor = User.find_by(username: event["actor"]["name"])
     end
+    actor ||= User.find_by(username: event["actor"]["name"])
     logger.error "Cannot find user #{event["actor"]["name"]}" if actor.nil?
     actor
   end
