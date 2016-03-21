@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable, :lockable,
          :recoverable, :rememberable, :trackable, :validatable, authentication_keys: [:username]
 
-  USERNAME_CHARS  = "a-z0-9"
+  USERNAME_CHARS  = "a-z0-9."
   USERNAME_FORMAT = /\A[#{USERNAME_CHARS}]{4,30}\Z/
 
   APPLICATION_TOKENS_MAX = 5
